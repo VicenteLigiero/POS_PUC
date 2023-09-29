@@ -1,0 +1,103 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSynapseAnalyticsTable1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          {Número do Contrato} as string,",
+				"          Objeto as string,",
+				"          {Fundamento Legal} as string,",
+				"          {Modalidade Compra} as string,",
+				"          {Situação Contrato} as string,",
+				"          {Código Órgão Superior} as string,",
+				"          {Nome Órgão Superior} as string,",
+				"          {Código Órgão} as string,",
+				"          {Nome Órgão} as string,",
+				"          {Código UG} as string,",
+				"          {Nome UG} as string,",
+				"          {Data Assinatura Contrato} as string,",
+				"          {Data Publicação DOU} as string,",
+				"          {Data Início Vigência} as string,",
+				"          {Data Fim Vigência} as string,",
+				"          {Código Contratado} as string,",
+				"          {Nome Contratado} as string,",
+				"          {Valor Inicial Compra} as string,",
+				"          {Valor Final Compra} as string,",
+				"          {Número Licitação} as string,",
+				"          {Código UG Licitação} as string,",
+				"          {Nome UG Licitação} as string,",
+				"          {Código Modalidade Compra Licitação} as string,",
+				"          {Modalidade Compra Licitação} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'allErrors',",
+				"     transactionCommit: 'single',",
+				"     reportSuccessOnError: false,",
+				"     mapColumn(",
+				"          {Número_do_Contrato} = {Número do Contrato},",
+				"          Objeto,",
+				"          Fundamento_Legal = {Fundamento Legal},",
+				"          Modalidade_Compra = {Modalidade Compra},",
+				"          {Situação_Contrato} = {Situação Contrato},",
+				"          {Código_Órgão_Superior} = {Código Órgão Superior},",
+				"          {Nome_Órgão_Superior} = {Nome Órgão Superior},",
+				"          {Código_Órgão} = {Código Órgão},",
+				"          {Nome_Órgão} = {Nome Órgão},",
+				"          {Código_UG} = {Código UG},",
+				"          Nome_UG = {Nome UG},",
+				"          Data_Assinatura_Contrato = {Data Assinatura Contrato},",
+				"          {Data_Publicação_DOU} = {Data Publicação DOU},",
+				"          {Data_Início_Vigência} = {Data Início Vigência},",
+				"          {Data_Fim_Vigência} = {Data Fim Vigência},",
+				"          {Código_Contratado} = {Código Contratado},",
+				"          Nome_Contratado = {Nome Contratado},",
+				"          Valor_Inicial_Compra = {Valor Inicial Compra},",
+				"          Valor_Final_Compra = {Valor Final Compra},",
+				"          {Número_Licitação} = {Número Licitação},",
+				"          {Código_UG_Licitação} = {Código UG Licitação},",
+				"          {Nome_UG_Licitação} = {Nome UG Licitação},",
+				"          {Código_Modalidade_Compra_Licitação} = {Código Modalidade Compra Licitação},",
+				"          {Modalidade_Compra_Licitação} = {Modalidade Compra Licitação}",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

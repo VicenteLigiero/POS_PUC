@@ -1,0 +1,122 @@
+{
+	"name": "DelimitedText2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "202301_Compras.csv",
+				"container": "dados"
+			},
+			"columnDelimiter": ";",
+			"encodingName": "WINDOWS-1252",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Número do Contrato",
+				"type": "String"
+			},
+			{
+				"name": "Objeto",
+				"type": "String"
+			},
+			{
+				"name": "Fundamento Legal",
+				"type": "String"
+			},
+			{
+				"name": "Modalidade Compra",
+				"type": "String"
+			},
+			{
+				"name": "Situação Contrato",
+				"type": "String"
+			},
+			{
+				"name": "Código Órgão Superior",
+				"type": "String"
+			},
+			{
+				"name": "Nome Órgão Superior",
+				"type": "String"
+			},
+			{
+				"name": "Código Órgão",
+				"type": "String"
+			},
+			{
+				"name": "Nome Órgão",
+				"type": "String"
+			},
+			{
+				"name": "Código UG",
+				"type": "String"
+			},
+			{
+				"name": "Nome UG",
+				"type": "String"
+			},
+			{
+				"name": "Data Assinatura Contrato",
+				"type": "String"
+			},
+			{
+				"name": "Data Publicação DOU",
+				"type": "String"
+			},
+			{
+				"name": "Data Início Vigência",
+				"type": "String"
+			},
+			{
+				"name": "Data Fim Vigência",
+				"type": "String"
+			},
+			{
+				"name": "Código Contratado",
+				"type": "String"
+			},
+			{
+				"name": "Nome Contratado",
+				"type": "String"
+			},
+			{
+				"name": "Valor Inicial Compra",
+				"type": "String"
+			},
+			{
+				"name": "Valor Final Compra",
+				"type": "String"
+			},
+			{
+				"name": "Número Licitação",
+				"type": "String"
+			},
+			{
+				"name": "Código UG Licitação",
+				"type": "String"
+			},
+			{
+				"name": "Nome UG Licitação",
+				"type": "String"
+			},
+			{
+				"name": "Código Modalidade Compra Licitação",
+				"type": "String"
+			},
+			{
+				"name": "Modalidade Compra Licitação",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,20 @@
+{
+	"name": "MetadataDrivenCopyTask_kee_ControlDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "MetadataDrivenCopyTask_kee_20230928"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "Compras",
+			"table": "MainControlTable_kee"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

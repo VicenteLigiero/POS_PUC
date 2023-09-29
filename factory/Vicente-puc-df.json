@@ -1,0 +1,9 @@
+{
+	"name": "Vicente-puc-df",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "27f533aa-5b3a-4fb8-8f0c-3b26197c15ff",
+		"tenantId": "b61eb351-f5c4-42c2-89b9-5dc58ea9f1b0"
+	}
+}

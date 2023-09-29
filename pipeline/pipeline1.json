@@ -1,0 +1,423 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"columnCount"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"maxConcurrentConnections": 1,
+							"copyBehavior": "MergeFiles"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Número do Contrato",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Número do Contrato",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Objeto",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Objeto",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Fundamento Legal",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Fundamento Legal",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Modalidade Compra",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Modalidade Compra",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Situação Contrato",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Situação Contrato",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Código Órgão Superior",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Código Órgão Superior",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Nome Órgão Superior",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Nome Órgão Superior",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Código Órgão",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Código Órgão",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Nome Órgão",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Nome Órgão",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Código UG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Código UG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Nome UG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Nome UG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Data Publicação DOU",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Data Publicação DOU",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Data Início Vigência",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Data Início Vigência",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Data Fim Vigência",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Data Fim Vigência",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Código Contratado",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Código Contratado",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Nome Contratado",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Nome Contratado",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Valor Inicial Compra",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Valor Inicial Compra",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Valor Final Compra",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Valor Final Compra",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Número Licitação",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Número Licitação",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Código UG Licitação",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Código UG Licitação",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Nome UG Licitação",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Nome UG Licitação",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Código Modalidade Compra Licitação",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Código Modalidade Compra Licitação",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Modalidade Compra Licitação",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Modalidade Compra Licitação",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow1",
+						"type": "DataFlowReference"
+					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "linkedService1",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "csvdados/synapse/workspaces/vdados/sparkpools/PDADOS/sparkpoolinstances"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-09-29T02:11:28Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
