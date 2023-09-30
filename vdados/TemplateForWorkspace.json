@@ -1,0 +1,189 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Nome do Workspace",
+			"defaultValue": "vdados"
+		},
+		"vdados-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadeia de caracteres segura para 'connectionString' de 'vdados-WorkspaceDefaultSqlServer'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:vdados.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"vdados-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dldados.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/vdados-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('vdados-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/vdados-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('vdados-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Consulta_DIF_Valor_Inicial_Final')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT [Nome Órgão Superior],[Nome Contratado], [Valor Final Compra], [Valor Inicial Compra]\n,(CAST(REPLACE([Valor Final Compra],',','.') as DECIMAL(20,4)) - CAST(REPLACE([Valor Inicial Compra],',','.') as DECIMAL(20,4)))  as DIF\n FROM [dbo].[202301_Compras]\n GROUP BY [Nome Órgão Superior],[Nome Contratado], [Valor Final Compra], [Valor Inicial Compra]\n HAVING (CAST(REPLACE([Valor Final Compra],',','.') as DECIMAL(20,4)) - CAST(REPLACE([Valor Inicial Compra],',','.') as DECIMAL(20,4))) > 0\n ORDER BY [Nome Órgão Superior],DIF DESC\n ",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "PDADOS",
+						"poolName": "PDADOS"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Consulta_Total_Contratos_Modalidade_Valor')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT [Nome Órgão Superior],[Modalidade Compra], COUNT(DISTINCT([Número do Contrato])) AS Quantidade_Contratos_Modalidade\n,SUM(CAST(REPLACE([Valor Final Compra],',','.') AS DECIMAL(20,4))) AS Total_Contratos\n FROM [dbo].[202301_Compras]\n GROUP BY [Nome Órgão Superior], [Modalidade Compra]\n ORDER BY Quantidade_Contratos_Modalidade DESC\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "PDADOS",
+						"poolName": "PDADOS"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Consulta_Total_Contratos_Orgao_Valor')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT [Nome Órgão Superior], COUNT(DISTINCT([Número do Contrato])) as Quantidade_Contratos_Orgao\n,MIN([Valor Final Compra]) AS Menor_Contrato\n,MAX([Valor Final Compra]) AS Maior_Contrato\n,SUM(CAST(REPLACE([Valor Final Compra],',','.') as DECIMAL(20,4))) AS Total_Contratos\n FROM [dbo].[202301_Compras]\n GROUP BY [Nome Órgão Superior]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "PDADOS",
+						"poolName": "PDADOS"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Consulta_Total_Fornecedor_Orgao_Valor')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT [Nome Contratado], COUNT(DISTINCT([Nome Órgão Superior])) AS Quantidade_Orgao\n,SUM(CAST(REPLACE([Valor Final Compra],',','.') as DECIMAL(20,4))) AS Total_Contratos\n FROM [dbo].[202301_Compras]\n GROUP BY [Nome Contratado]\n ORDER BY Quantidade_Orgao DESC",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "PDADOS",
+						"poolName": "PDADOS"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/PDADOS')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "brazilsouth"
+		}
+	]
+}
