@@ -1,0 +1,17 @@
+{
+	"name": "Consulta_Total_Contratos_Orgao_Valor",
+	"properties": {
+		"content": {
+			"query": "SELECT [Nome Órgão Superior], COUNT(DISTINCT([Número do Contrato])) as Quantidade_Contratos_Orgao\n,MIN([Valor Final Compra]) AS Menor_Contrato\n,MAX([Valor Final Compra]) AS Maior_Contrato\n,SUM(CAST(REPLACE([Valor Final Compra],',','.') as DECIMAL(20,4))) AS Total_Contratos\n FROM [dbo].[202301_Compras]\n GROUP BY [Nome Órgão Superior]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "PDADOS",
+				"poolName": "PDADOS"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

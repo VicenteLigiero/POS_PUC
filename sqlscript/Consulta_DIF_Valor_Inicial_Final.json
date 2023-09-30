@@ -1,0 +1,17 @@
+{
+	"name": "Consulta_DIF_Valor_Inicial_Final",
+	"properties": {
+		"content": {
+			"query": "SELECT [Nome Órgão Superior],[Nome Contratado], [Valor Final Compra], [Valor Inicial Compra]\n,(CAST(REPLACE([Valor Final Compra],',','.') as DECIMAL(20,4)) - CAST(REPLACE([Valor Inicial Compra],',','.') as DECIMAL(20,4)))  as DIF\n FROM [dbo].[202301_Compras]\n GROUP BY [Nome Órgão Superior],[Nome Contratado], [Valor Final Compra], [Valor Inicial Compra]\n HAVING (CAST(REPLACE([Valor Final Compra],',','.') as DECIMAL(20,4)) - CAST(REPLACE([Valor Inicial Compra],',','.') as DECIMAL(20,4))) > 0\n ORDER BY [Nome Órgão Superior],DIF DESC\n ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "PDADOS",
+				"poolName": "PDADOS"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
